@@ -7,7 +7,7 @@ local opts = {
 local map = vim.keymap.set
 
 -- nvim-tree的快捷键
-map('n', '<c-n>', ':nvimtreetoggle<cr>', opts)
+map('n', '<c-n>', ':NvimTreeToggle<cr>', opts)
 
 -- 快捷切换窗口
 map('n', '<c-h>', '<c-w>h', opts)
