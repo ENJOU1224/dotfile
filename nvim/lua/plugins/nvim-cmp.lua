@@ -9,6 +9,7 @@ return{
       "hrsh7th/cmp-cmdline",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets", -- 预定义片段库
     },
     config = function()
       -- 检查 LuaSnip 是否加载
@@ -36,26 +37,19 @@ return{
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
-          -- ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
           ['<CR>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              if luasnip.expandable() then
-                luasnip.expand()
-              else
-                cmp.confirm({
-                  select = true,
-                })
-              end
+            if luasnip.expandable() then
+              luasnip.expand() -- 优先展开片段
+            elseif cmp.visible() then
+              cmp.confirm({ select = true }) -- 确认补全项
             else
-              fallback()
+              fallback() -- 默认回车行为
             end
           end),
 
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.locally_jumpable(1) then
-              luasnip.jump(1)
             else
               fallback()
             end
@@ -64,13 +58,13 @@ return{
           ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
-            elseif luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
             else
               fallback()
             end
           end, { "i", "s" }),
         }),
+
+
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           -- { name = 'vsnip' }, -- For vsnip users.

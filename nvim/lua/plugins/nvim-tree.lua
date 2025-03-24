@@ -1,7 +1,6 @@
 return {
   "nvim-tree/nvim-tree.lua",
-  version = "*",
-  lazy = false,
+  event = "BufEnter",
   dependencies = {
     "nvim-tree/nvim-web-devicons",
   },
