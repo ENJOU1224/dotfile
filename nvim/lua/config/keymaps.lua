@@ -1,10 +1,18 @@
--- define common options
+-- -- define common options
+local M = {}
+
+local function get_buf_map_opts(bufnr, desc_text)
+  return { noremap = true, silent = true, buffer = bufnr, desc = desc_text }
+end
+
 local opts = {
     noremap = true,      -- non-recursive
     silent = true,       -- do not show message
 }
 
 local map = vim.keymap.set
+vim.g.mapleader = '\\'
+
 
 -- nvim-tree的快捷键
 map('n', '<c-n>', ':NvimTreeToggle<cr>', opts)
@@ -25,10 +33,27 @@ map('n', 'L', '$', opts)
 map('n', 'dL', 'd$', opts)
 map('n', 'yL', 'y$', opts)
 
--- 格式化
--- map('v', '<leader>f', '=', opts)
-
 -- 分窗
 map('n', '<leader>sv', '<c-w>v', opts)
 map('n', '<leader>sh', '<c-w>s', opts)
 
+-- 函数：设置 LSP 相关的缓冲区本地快捷键
+function M.setup_lsp_buffer_keymaps(bufnr, client_name, client_supports_formatting_flag)
+
+  local map_buf = function(mode, lhs, rhs, desc_text)
+      vim.keymap.set(mode, lhs, rhs, get_buf_map_opts(bufnr, desc_text))
+  end
+
+  map_buf('n', 'gd', vim.lsp.buf.definition, 'LSP Go to Definition')
+  map_buf('n', 'K', vim.lsp.buf.hover, 'LSP Hover Documentation')
+  map_buf('n', '<leader>vd', vim.lsp.buf.type_definition, 'LSP View Type Definition')
+  map_buf('n', '<leader>rn', vim.lsp.buf.rename, 'LSP Rename Symbol')
+  map_buf('n', '<leader>ca', vim.lsp.buf.code_action, 'LSP Code Actions')
+  map_buf('n', 'gr', vim.lsp.buf.references, 'LSP Go to References')
+
+  if client_supports_formatting_flag then
+    map_buf({'n', 'v'}, '<leader>f', function() vim.lsp.buf.format({ bufnr = bufnr, async = true }) end, 'LSP Format (File/Selection)')
+  end
+end
+
+return M
