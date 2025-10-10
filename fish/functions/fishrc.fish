@@ -1,4 +1,4 @@
 function fishrc
-	set PATH /opt/nvim-linux64/bin $PATH
+  set PATH /opt/nvim-linux-x86_64/bin $PATH
 end
 
