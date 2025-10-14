@@ -13,6 +13,8 @@ local opts = {
 local map = vim.keymap.set
 vim.g.mapleader = '\\'
 
+-- 关闭的快捷键
+map('n', '<c-q>', ':close<cr>', opts)
 
 -- nvim-tree的快捷键
 map('n', '<c-n>', ':NvimTreeToggle<cr>', opts)

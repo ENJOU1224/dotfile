@@ -30,3 +30,6 @@ vim.o.smartindent = true
 -- split 
 vim.o.splitbelow = true
 vim.o.splitright = true
+
+-- 等待时间
+vim.o.updatetime = 300
