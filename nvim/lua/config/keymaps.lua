@@ -39,6 +39,10 @@ map('n', 'yL', 'y$', opts)
 map('n', '<leader>sv', '<c-w>v', opts)
 map('n', '<leader>sh', '<c-w>s', opts)
 
+-- 注释
+map_buf('n', '<leader>cc', 'gcc', { remap = true, silent = true })      
+map_buf('v', '<leader>cc', 'gc', { remap = true, silent = true })  
+
 -- 函数：设置 LSP 相关的缓冲区本地快捷键
 function M.setup_lsp_buffer_keymaps(bufnr, client_name, client_supports_formatting_flag)
 
