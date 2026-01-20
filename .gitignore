@@ -1,1 +1,8 @@
+*
 nvim/lazy-lock.json
+!autostart
+!nvim
+!hypr
+!fish
+!waybar
+
