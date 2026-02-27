@@ -1,45 +1,23 @@
   const secureDnsGroup = {
     name: "Secure-DNS",
     type: "url-test",
-    url: "http://www.gstatic.com/generate_204",
+    url: "http://www.google.com",
     interval: 300,
     tolerance: 150,
     "include-all": true,
     filter: "^(?!.*(Direct|直连|剩余|流量|到期|过期|Traffic|Time|官网)).*"
   };
 const priorityRules = [
-    // --- DNS 防泄漏 (指向 Secure-DNS) ---
-    "IP-CIDR,8.8.8.8/32,Secure-DNS,no-resolve",
-    "IP-CIDR,8.8.4.4/32,Secure-DNS,no-resolve",
-    "IP-CIDR,1.1.1.1/32,Secure-DNS,no-resolve",
-    "IP-CIDR,1.0.0.1/32,Secure-DNS,no-resolve",
-    "DOMAIN,dns.google,Secure-DNS",
-    "DOMAIN,cloudflare-dns.com,Secure-DNS",
-
-    // --- 屏蔽 B站 P2P ---
-    "DOMAIN-SUFFIX,mcdn.bilivideo.com,REJECT",
-    "DOMAIN-SUFFIX,mcdn.bilivideo.cn,REJECT",
-    "DOMAIN-SUFFIX,szbdyd.com,REJECT",
-
-    // --- Tailscale 直连 ---
-    "PROCESS-NAME,tailscale.exe,DIRECT",
-    "PROCESS-NAME,tailscaled.exe,DIRECT",
-    "PROCESS-NAME,tailscale-ipn.exe,DIRECT",
-    "DOMAIN-SUFFIX,tailscale.com,DIRECT",
-    "DOMAIN-SUFFIX,tailscale.io,DIRECT",
-    "IP-CIDR,100.64.0.0/10,DIRECT,no-resolve",
-
-    // Sunshine/Moonlight 串流强制直连
-    "PROCESS-NAME,sunshine.exe,DIRECT",
-    "PROCESS-NAME,moonlight.exe,DIRECT",
-    "PROCESS-NAME,nikke.exe,DIRECT",
-    "PROCESS-NAME,wegame.exe,DIRECT",
-
-    // 强制 localhost 直连
-    "DOMAIN-SUFFIX,localhost,DIRECT",
-    "IP-CIDR,127.0.0.0/8,DIRECT,no-resolve",
-
-    "DST-PORT,7680,DIRECT"
+  // --- DNS 防泄漏 ---
+  "IP-CIDR,8.8.8.8/32,Secure-DNS,no-resolve",
+  "IP-CIDR,8.8.4.4/32,Secure-DNS,no-resolve",
+  "IP-CIDR,1.1.1.1/32,Secure-DNS,no-resolve",
+  "IP-CIDR,1.0.0.1/32,Secure-DNS,no-resolve",
+  "DOMAIN,dns.google,Secure-DNS",
+  "DOMAIN,cloudflare-dns.com,Secure-DNS",
+  "DOMAIN-SUFFIX,mcdn.bilibili.com,REJECT",
+  "DOMAIN-SUFFIX,mcdn.bilibili.cn,REJECT",
+  "PROCESS-NAME,fusion360.exe,DIRECT",
   ];
 function main(config) {
   // 确保 proxy-groups 存在
@@ -48,7 +26,9 @@ function main(config) {
   }
   // 放到最后面
   config['proxy-groups'].push(secureDnsGroup);
-  
+
+  // 你的优先规则在前 + 机场自带规则在后
+  // 既然机场自带了 MATCH/FINAL，我们就不需要手动补了
   config.rules = [...priorityRules, ...(config.rules || [])];
 
   return config;
