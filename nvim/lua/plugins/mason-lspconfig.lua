@@ -2,7 +2,9 @@
 return {
   "mason-org/mason-lspconfig.nvim",
   opts = {
-    ensure_installed = {}
+    automatic_enable = {
+    exclude = { "metals" },
+  },
   },
   dependencies = { 
     {"mason-org/mason.nvim", opts = {} },

@@ -63,8 +63,10 @@ return{
             end
           end, { "i", "s" }),
         }),
-
-
+        preselect = cmp.PreselectMode.None,
+        completion = {
+          completeopt = "menu,menuone,noinsert",
+        },
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           -- { name = 'vsnip' }, -- For vsnip users.

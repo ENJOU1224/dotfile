@@ -14,6 +14,18 @@ return{
       'confirm_done',
       cmp_autopairs.on_confirm_done()
     )
+
+    vim.keymap.set("i", "<C-l>", function()
+		local col = vim.fn.col(".")
+		local line = vim.fn.getline(".")
+		local next_char = line:sub(col, col)
+
+		if next_char:match("[%)%]%}%\"%']") then
+			return "<Right>"
+		end
+
+		return ""
+    end, { expr = true, noremap = true, silent = true })
   end
   -- use opts = {} for passing setup options
   -- this is equalent to setup({}) function
